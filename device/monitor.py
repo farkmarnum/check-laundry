@@ -23,30 +23,23 @@ def create_audio_callback(id):
     
     return audio_callback
 
-# def audio_callback_1(indata, _frames, _time, _status):
-#     volume_norm = np.linalg.norm(indata)
-#     print('1:', volume_norm)
-
-# def audio_callback_2(indata, _frames, _time, _status):
-#     volume_norm = np.linalg.norm(indata)
-#     print('2:', volume_norm)
-
-# stream_1 = sd.InputStream(device=device_indices[0], channels=1, samplerate=samplerate, callback=audio_callback_1, blocksize=samplerate)
-# stream_2 = sd.InputStream(device=device_indices[1], channels=1, samplerate=samplerate, callback=audio_callback_2, blocksize=samplerate)
-
 streams = [
-    sd.InputStream(device=index, channels=1, samplerate=samplerate, callback=create_audio_callback(str(index)), blocksize=samplerate) for index in device_indices
+    sd.InputStream(
+        device=index,
+        channels=1,
+        samplerate=samplerate,
+        blocksize=samplerate,
+        callback=create_audio_callback(str(index)),
+    ) for index in device_indices
 ]
 
-@profile
 def main():
     with contextlib.ExitStack() as stack:
         for mgr in streams:
             stack.enter_context(mgr)
 
-        print(3)
-        sd.sleep(10 * 1000)
-        print(4)
+        while True:
+            sd.sleep(15 * 1000)
 
 if __name__ == '__main__':
     main()
