@@ -1,11 +1,16 @@
-FIVE_MINUTES = 60 * 5
+MIN_BUFFER_LENGTH = 30 # 30 seconds
+BUFFER_HISTORY_TO_PROCESS = 60 * 3 # 3 minutes
+
 LOUDNESS_THRESHOLD = 35
 
 def notify(id, state):
     print(f'{id} => {state}') # TODO
 
 def derive_state_from_buffer(buffer):
-    last_five_mins = list(buffer)[-1 * FIVE_MINUTES:]
+    if len(buffer) < MIN_BUFFER_LENGTH:
+        return 'unknown'
+
+    last_five_mins = list(buffer)[-1 * BUFFER_HISTORY_TO_PROCESS:]
     average = sum(last_five_mins) / len(last_five_mins)
 
     if average > LOUDNESS_THRESHOLD:
