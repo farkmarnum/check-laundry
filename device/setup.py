@@ -52,7 +52,7 @@ def setup():
             device=index,
             channels=1,
             samplerate=samplerate,
-            blocksize=int(samplerate / 10),
+            blocksize=samplerate, # 1 second
             callback=create_audio_callback(index),
         ) for index in device_indices
     ]
