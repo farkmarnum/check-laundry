@@ -10,8 +10,8 @@ def derive_state_from_buffer(buffer):
     if len(buffer) < MIN_BUFFER_LENGTH:
         return 'unknown'
 
-    last_five_mins = list(buffer)[-1 * BUFFER_HISTORY_TO_PROCESS:]
-    average = sum(last_five_mins) / len(last_five_mins)
+    last_chunk = list(buffer)[-1 * BUFFER_HISTORY_TO_PROCESS:]
+    average = sum(last_chunk) / len(last_chunk)
 
     if average > LOUDNESS_THRESHOLD:
         return 'running'
