@@ -47,14 +47,14 @@ def setup():
 
         return audio_callback
 
-    streams = [
-        sd.InputStream(
+    streams = {
+        [str(index)]: sd.InputStream(
             device=index,
             channels=1,
             samplerate=samplerate,
             blocksize=samplerate, # 1 second
             callback=create_audio_callback(index),
         ) for index in device_indices
-    ]
+    }
 
     return buffers, streams, animations

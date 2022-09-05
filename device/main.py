@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from config import MONITOR_PERIOD
 from setup import setup
-from monitor import monitor
+from process import process
 
 DEBUG = False
 
@@ -23,7 +23,7 @@ def loop():
 
         while True:
             sleep(MONITOR_PERIOD)
-            monitor(buffers)
+            process(buffers)
 
 if __name__ == '__main__':
     loop()
