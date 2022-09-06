@@ -14,7 +14,7 @@ def loop():
             stack.enter_context(mgr)
 
         while True:
-            sd.sleep(MONITOR_PERIOD)
+            sd.sleep(MONITOR_PERIOD * 1000)
             process(buffers)
 
 if __name__ == '__main__':
