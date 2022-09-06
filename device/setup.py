@@ -7,7 +7,7 @@ import sounddevice as sd
 from config import MIC_NAME, MAX_BUFFER_SIZE
 
 def setup():
-    microphones = [s for s in sd.query_devices() if s['name'] == MIC_NAME]
+    microphones = [s for s in sd.query_devices() if MIC_NAME in s['name']]
     if len(microphones) < 1:
         sys.exit("Microphones not found.")
 
