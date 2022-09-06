@@ -21,7 +21,8 @@ def setup():
         buffers[str(id)] = buffer
 
         def audio_callback(indata, _frames, _time, _status):
-            volume_norm = np.linalg.norm(indata) # Sort of a loudness calculation 🤷‍♂️
+            volume_norm = np.linalg.norm(indata) # Sort of a loudness calculation 🤷
+            print(f'volume for {id} = {volume_norm}')
             buffer.append(volume_norm)
 
         return audio_callback

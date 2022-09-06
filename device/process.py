@@ -27,6 +27,7 @@ def process(buffers):
         prev_state = _states[id]
 
         state = derive_state_from_buffer(buffer)
+        print(f'state for {id} = {state}')
 
         if state != prev_state:
             prev_state = state
