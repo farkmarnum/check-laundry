@@ -1,7 +1,4 @@
-MIN_BUFFER_LENGTH = 30 # 30 seconds
-BUFFER_HISTORY_TO_PROCESS = 60 * 3 # 3 minutes
-
-LOUDNESS_THRESHOLD = 35
+from config import MIN_BUFFER_LENGTH, BUFFER_HISTORY_TO_PROCESS, LOUDNESS_THRESHOLD
 
 def notify(id, state):
     print(f'{id} => {state}') # TODO
