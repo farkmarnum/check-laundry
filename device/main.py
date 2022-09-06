@@ -1,5 +1,6 @@
 import contextlib
 from time import sleep
+import sounddevice as sd
 
 from config import MONITOR_PERIOD
 from setup import setup
@@ -13,7 +14,7 @@ def loop():
             stack.enter_context(mgr)
 
         while True:
-            sleep(MONITOR_PERIOD)
+            sd.sleep(MONITOR_PERIOD)
             process(buffers)
 
 if __name__ == '__main__':
