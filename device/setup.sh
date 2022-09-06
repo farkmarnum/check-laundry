@@ -12,8 +12,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y install \
   libatlas-base-dev
 
 # Set up virtual environment if needed
-if [ ! -d "./venv" ]; then
-  rm -rf .venv
+if [ ! -d "./.venv" ]; then
   python3 -m venv .venv
 fi
 
