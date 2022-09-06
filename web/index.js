@@ -1,6 +1,15 @@
-// TODO
+const express = require('express');
 
-// receive requests w/ api key
-// update data w/ some persistent storage (tiny DB?)
+const app = express();
 
-// serve frontend as well
+const { API_KEY } = process.env;
+
+app.get('/', (req, res) => {
+  // TODO: serve frontend
+})
+
+app.post('/api/v1/status', (req, res) => {
+  // check header for API key
+
+  // Update storage
+})
