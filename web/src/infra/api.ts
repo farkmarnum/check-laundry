@@ -4,7 +4,7 @@ import { updateStationData, getStationData } from '../backend/s3';
 import { DOMAIN, API_KEY } from './config';
 import { certificateArn } from './dns';
 
-const api = new cloud.API('backend');
+const api = new cloud.API('laundry');
 
 /* BACKEND */
 api.post('/api/v1/data', async (req, res) => {
