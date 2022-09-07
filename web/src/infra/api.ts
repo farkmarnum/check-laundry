@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as cloud from '@pulumi/cloud-aws';
 
 // import { updateStationData, getStationData } from '../backend/s3';
@@ -17,13 +18,12 @@ api.get(`/api/v1/stationData/{stationId}`, getStationDataHandler);
 api.post(`/api/v1/stationData/{stationId}`, updateStationDataHandler);
 
 // Static frontend:
-api.static('$default', `${__dirname}/../frontend/index.html`, {
-  contentType: 'text/html',
-});
+const frontendDir = path.join(__dirname, '../frontend/');
+api.static('/', frontendDir);
 
+// Domain mapping:
 api.attachCustomDomain({ domainName: DOMAIN, certificateArn });
 
 const { url, customDomains } = api.publish();
-
 export const apiUrl = url;
 export const { cloudfrontDomainName, cloudfrontZoneId } = customDomains[0];
