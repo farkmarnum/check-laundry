@@ -8,6 +8,7 @@ const api = new cloud.API('backend');
 
 /* BACKEND */
 api.post('/api/v1/data', async (req, res) => {
+  // NOTE: this route is protected by an API key:
   if (req.headers['API-KEY'] !== API_KEY.get()) {
     res.status(401).json({ message: 'Unauthorized' });
     return;
@@ -35,11 +36,6 @@ api.post('/api/v1/data', async (req, res) => {
 });
 
 api.get('/api/v1/data/{stationId}', async (req, res) => {
-  if (req.headers['API-KEY'] !== API_KEY.get()) {
-    res.status(401).json({ message: 'Unauthorized' });
-    return;
-  }
-
   const { stationId } = req.params;
 
   if (!stationId) {
