@@ -14,6 +14,8 @@ const TIME_CHUNK = 1000 * 60 * 60 * 2; // 2 hours (ms)
  * }
  */
 
+type StationData = Record<string, [number, number][]>;
+
 export const updateStationData = async ({
   stationId,
   data,
@@ -23,29 +25,43 @@ export const updateStationData = async ({
 }) => {
   const timestamp = +new Date();
 
-  const blob = await bucket.get(stationId);
-  const unitData: Record<string, [number, number][]> = JSON.parse(
-    blob.toString() || '{}',
-  );
+  let stationData: StationData;
+  try {
+    const blob = await bucket.get(stationId);
+    stationData = JSON.parse(blob.toString() || '{}');
+  } catch (err) {
+    if ((err as { code: string }).code === 'NoSuchKey') {
+      stationData = {};
+    } else {
+      throw err;
+    }
+  }
 
   Object.entries(data as Record<string, number>).forEach(
     ([unitId, loudnessLevel]) => {
-      if (!unitData[unitId]) {
-        unitData[unitId] = [];
+      if (!stationData[unitId]) {
+        stationData[unitId] = [];
       }
 
-      unitData[unitId].push([timestamp, loudnessLevel]);
+      stationData[unitId].push([timestamp, loudnessLevel]);
     },
   );
 
-  await bucket.put(stationId, Buffer.from(JSON.stringify(unitData)));
+  await bucket.put(stationId, Buffer.from(JSON.stringify(stationData)));
 };
 
 export const getStationData = async ({ stationId }: { stationId: string }) => {
-  const blob = await bucket.get(stationId);
-  const stationData: Record<string, [number, number][]> = JSON.parse(
-    blob.toString() || '{}',
-  );
+  let stationData: StationData;
+  try {
+    const blob = await bucket.get(stationId);
+    stationData = JSON.parse(blob.toString() || '{}');
+  } catch (err) {
+    if ((err as { code: string }).code === 'NoSuchKey') {
+      stationData = {};
+    } else {
+      throw err;
+    }
+  }
 
   const timeThreshold = +new Date() - TIME_CHUNK;
 
