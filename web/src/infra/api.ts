@@ -60,7 +60,7 @@ api.get('/api/v1/data/{stationId}', async (req, res) => {
 });
 
 /* FRONTEND */
-api.static('/*', `${__dirname}/../frontend/index.html`, {
+api.static('/{params+}', `${__dirname}/../frontend/index.html`, {
   contentType: 'text/html',
 });
 
