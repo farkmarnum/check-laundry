@@ -6,9 +6,9 @@ from config import API_KEY, API_URL, STATION_ID, MIN_BUFFER_LENGTH
 
 def notify(unit_data):
     headers = { 'API_KEY': API_KEY, 'Content-Type': 'application/json' }
-    data = json.dumps({ 'station': STATION_ID, data: unit_data })
+    data = json.dumps({ data: unit_data })
 
-    request = Request(API_URL, headers=headers, data=data)
+    request = Request(f'{API_URL}/{STATION_ID}', headers=headers, data=data)
 
     with urlopen(request) as response:
         print(f'Notifing server. Response status = {response.status}')
