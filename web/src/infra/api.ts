@@ -1,8 +1,8 @@
 import * as cloud from '@pulumi/cloud-aws';
 
 import { updateStationData, getStationData } from '../backend/s3';
-import { DOMAIN, API_KEY } from './config';
-import { certificateArn } from './dns';
+import { API_KEY, DOMAIN } from './config';
+import { certificateArn } from './cert';
 
 const api = new cloud.API('laundry');
 
@@ -56,11 +56,13 @@ api.get('/api/v1/data/{stationId}', async (req, res) => {
 });
 
 /* FRONTEND */
-api.static('/{params+}', `${__dirname}/../frontend/index.html`, {
+api.static('$default', `${__dirname}/../frontend/index.html`, {
   contentType: 'text/html',
 });
 
-/* DNS */
 api.attachCustomDomain({ domainName: DOMAIN, certificateArn });
 
-export const { url: apiUrl } = api.publish();
+const { url, customDomains } = api.publish();
+
+export const apiUrl = url;
+export const { cloudfrontDomainName, cloudfrontZoneId } = customDomains[0];

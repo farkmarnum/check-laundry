@@ -1,17 +1,8 @@
 import * as aws from '@pulumi/aws';
-import CertWithValidation from './components/CertWithValidation';
 import { DOMAIN } from './config';
 
-const certWithValidation = new CertWithValidation('mainCert', {
-  domain: DOMAIN,
-});
-
-export const { certificateArn, zoneId } = certWithValidation;
-
-const apiDomainName = new aws.apigateway.DomainName('apiDomainName', {
-  certificateArn,
-  domainName: DOMAIN,
-});
+import { cloudfrontDomainName, cloudfrontZoneId } from './api';
+import { zoneId } from './cert';
 
 export const apiDnsRecord = new aws.route53.Record('apiDnsRecord', {
   zoneId,
@@ -19,9 +10,9 @@ export const apiDnsRecord = new aws.route53.Record('apiDnsRecord', {
   name: DOMAIN,
   aliases: [
     {
-      name: apiDomainName.cloudfrontDomainName,
+      name: cloudfrontDomainName,
       evaluateTargetHealth: false,
-      zoneId: apiDomainName.cloudfrontZoneId,
+      zoneId: cloudfrontZoneId,
     },
   ],
 });
