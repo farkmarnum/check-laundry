@@ -18,7 +18,7 @@ export const updateStationDataHandler: RouteHandler = async (req, res) => {
 
   const { data } = JSON.parse(req.body.toString());
 
-  if (!data || Object.keys(data).length > 1) {
+  if (!data || Object.keys(data).length < 1) {
     res.status(400).json({ message: 'data missing!' });
     return;
   }
