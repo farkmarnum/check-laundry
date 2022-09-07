@@ -4,7 +4,7 @@ import { updateStationData, getStationData } from './s3';
 import { API_KEY } from '../infra/config';
 
 export const updateStationDataHandler: RouteHandler = async (req, res) => {
-  if (req.headers['API-KEY'] !== API_KEY.get()) {
+  if (req.headers['api-key'] !== API_KEY.get()) {
     res.status(401).json({ message: 'Unauthorized' });
     return;
   }
