@@ -14,14 +14,13 @@ def setup():
     device_indices = [int(s['index']) for s in microphones]
     samplerate = int(microphones[0]['default_samplerate'])
     buffers = {}
-    animations = []
 
     def create_audio_callback(id):
         buffer = deque(maxlen=MAX_BUFFER_SIZE)
         buffers[str(id)] = buffer
 
         def audio_callback(indata, _frames, _time, _status):
-            volume_norm = np.linalg.norm(indata) # Sort of a loudness calculation 🤷
+            volume_norm = np.linalg.norm(indata) # A basic loudness calculation 🤷
             print(f'volume for {id} = {volume_norm}')
             buffer.append(volume_norm)
 
@@ -37,4 +36,4 @@ def setup():
         ) for index in device_indices
     }
 
-    return buffers, streams, animations
+    return buffers, streams

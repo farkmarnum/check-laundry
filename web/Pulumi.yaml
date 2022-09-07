@@ -1,0 +1,3 @@
+name: check-laundry
+description: Check the laundry status
+runtime: nodejs

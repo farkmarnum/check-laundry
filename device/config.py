@@ -1,11 +1,15 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 MIC_NAME = 'ATR4650-USB'
 
-MONITOR_PERIOD = 15 # check every 15 seconds
+MONITOR_PERIOD = 60 # Report status once per minute
 
-MAX_BUFFER_SIZE = 60 * 60 * 2 # store the last 2 hours
+MAX_BUFFER_SIZE = 60 # just store the last minute
+MIN_BUFFER_LENGTH = 30 # wait to send data until we have at least 30 seconds of it
 
-MIN_BUFFER_LENGTH = 30 # wait to analyze until we have at least 30 seconds
-
-BUFFER_HISTORY_TO_PROCESS = 60 * 3 # average loudness across the last 3 minutes
-
-LOUDNESS_THRESHOLD = 20
+API_KEY = os.environ['API_KEY']
+API_URL = os.environ['API_URL']
+STATION_ID = os.environ['STATION_ID']
