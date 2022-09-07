@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as cloud from '@pulumi/cloud-aws';
 
-// import { updateStationData, getStationData } from '../backend/s3';
 import {
   updateStationDataHandler,
   getStationDataHandler,
