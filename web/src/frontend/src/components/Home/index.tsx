@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import Spinner from '../Spinner';
+import washer from '../../assets/washer.png';
 
 import s from './style.css';
 
@@ -14,8 +15,21 @@ const Loading = () => (
   </div>
 );
 
+const Stations = ({ data }: { data: Record<string, string> }) => (
+  <>
+    {Object.entries(data).map(([id, status]) => (
+      <div className={s.unit} key={id}>
+        <img src={washer} alt="washer" />
+        {status === 'off' && 'free ✅'}
+        {status === 'on' && 'in use ❌'}
+        {status === 'data_missing' && 'unknown 🤷'}
+      </div>
+    ))}
+  </>
+);
+
 const Home = () => {
-  const [stationData, setStationData] = useState();
+  const [stationData, setStationData] = useState<Record<string, string>>();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -31,7 +45,7 @@ const Home = () => {
         }
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch data 😕');
+        setError('Failed to fetch data! 😕');
       }
     })();
   }, []);
@@ -40,7 +54,7 @@ const Home = () => {
     <div>
       <h1>Check Laundry 🧺</h1>
       <div className={s.units}>
-        {stationData && JSON.stringify(stationData)}
+        {stationData && <Stations data={stationData} />}
         {error && error}
         {!stationData && !error && <Loading />}
       </div>
