@@ -20,6 +20,10 @@ const Station = ({ stationId }: { stationId: string }) => {
 
   const stationName = stationId.replace(/_/g, ' ');
 
+  useEffect(() => {
+    document.title = `Check Laundry - ${stationName}`;
+  }, [stationName]);
+
   return (
     <div className="title">
       <h1>{stationName}</h1>
