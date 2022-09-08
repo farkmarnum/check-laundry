@@ -21,16 +21,22 @@ const Loading = () => (
 
 const Station = ({ stationId }: { stationId: string }) => {
   const [stationData, setStationData] = useState();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     (async () => {
-      const resp = await fetch(
-        `https://checklaundry.com/api/v1/stationData/${stationId}`,
-      );
+      try {
+        const resp = await fetch(
+          `https://checklaundry.com/api/v1/stationData/${stationId}`,
+        );
 
-      const { data } = (await resp.json()) || {};
-      if (data) {
-        setStationData(data);
+        const { unitStates } = (await resp.json()) || {};
+        if (unitStates) {
+          setStationData(unitStates);
+        }
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch data 😕');
       }
     })();
   }, [stationId]);
@@ -45,7 +51,9 @@ const Station = ({ stationId }: { stationId: string }) => {
     <div>
       <h1>{stationName}</h1>
       <div className={s.units}>
-        {stationData ? JSON.stringify(stationData) : <Loading />}
+        {stationData && JSON.stringify(stationData)}
+        {error && error}
+        {!stationData && !error && <Loading />}
       </div>
     </div>
   );

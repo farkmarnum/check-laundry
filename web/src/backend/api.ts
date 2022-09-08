@@ -2,6 +2,7 @@ import { RouteHandler } from '@pulumi/cloud';
 
 import { updateStationData, getStationData } from './s3';
 import { API_KEY } from '../infra/config';
+import { getStatesFromData } from './getStatesFromData';
 
 export const updateStationDataHandler: RouteHandler = async (req, res) => {
   if (req.headers['api-key'] !== API_KEY.get()) {
@@ -42,7 +43,8 @@ export const getStationDataHandler: RouteHandler = async (req, res) => {
 
   try {
     const data = await getStationData({ stationId });
-    res.json({ data });
+    const unitStates = getStatesFromData(data);
+    res.json({ unitStates });
   } catch (err) {
     console.error(err);
 
