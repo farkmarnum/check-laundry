@@ -10,11 +10,13 @@ import { certificateArn } from './cert';
 
 const api = new cloud.API('laundry');
 
+const STATION_DATA_PATH = '/api/v1/stationData/{stationId}';
+
 // GET request for frontend to pull data:
-api.get(`/api/v1/stationData/{stationId}`, getStationDataHandler);
+api.get(STATION_DATA_PATH, getStationDataHandler);
 
 // POST request for devices to update data (protected by API key):
-api.post(`/api/v1/stationData/{stationId}`, updateStationDataHandler);
+api.post(STATION_DATA_PATH, updateStationDataHandler);
 
 // Static frontend:
 const frontendDir = path.join(__dirname, '../frontend/build');
@@ -23,6 +25,10 @@ api.static('/', frontendDir);
 // Domain mapping:
 api.attachCustomDomain({ domainName: DOMAIN, certificateArn });
 
-const { url, customDomains } = api.publish();
-export const apiUrl = url;
+export const { url, customDomains, routes, api: apiInternal } = api.publish();
 export const { cloudfrontDomainName, cloudfrontZoneId } = customDomains[0];
+
+export const lambdaforMainGet = apiInternal.getFunction(
+  STATION_DATA_PATH,
+  'GET',
+);
