@@ -4,32 +4,35 @@ import { updateStationData, getStationData } from './s3';
 import { API_KEY } from '../infra/config';
 import { getStatesFromData } from './getStatesFromData';
 
+// NOTE: we don't want to send any response besides a status code, since we want to save bandwidth (IoT LTE)
 export const updateStationDataHandler: RouteHandler = async (req, res) => {
   if (req.headers['api-key'] !== API_KEY.get()) {
-    res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).end();
     return;
   }
 
   const { stationId } = req.params;
 
   if (!stationId) {
-    res.status(400).json({ message: 'stationId missing!' });
+    console.error('stationId missing!');
+    res.status(400).end();
     return;
   }
 
   const { data } = JSON.parse(req.body.toString());
 
   if (!data || Object.keys(data).length < 1) {
-    res.status(400).json({ message: 'data missing!' });
+    console.error('data missing!');
+    res.status(400).end();
     return;
   }
 
   try {
     await updateStationData({ stationId, data });
-    res.json({ message: 'ok' });
+    res.status(200).end();
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).end();
   }
 };
 
