@@ -9,7 +9,7 @@
     "lint": "eslint src",
     "tc": "tsc --noEmit",
     "build": "cd src/frontend && yarn build",
-    "pulumi-up": "pulumi refesh -y --non-interactive && pulumi up -y",
+    "pulumi-up": "pulumi refresh -y --non-interactive && pulumi up -y",
     "deploy": "yarn build && yarn pulumi-up"
   },
   "devDependencies": {
