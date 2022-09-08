@@ -18,8 +18,6 @@ api.post(`/api/v1/stationData/{stationId}`, updateStationDataHandler);
 
 // Static frontend:
 const frontendDir = path.join(__dirname, '../frontend/build');
-api.static('/', `${frontendDir}/index.html`);
-api.static('/stations/{stationId}', `${frontendDir}/index.html`);
 api.static('/', frontendDir);
 
 // Domain mapping:
