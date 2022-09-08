@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "author": "Mark Farnum",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "lint": "eslint src",
     "tc": "tsc --noEmit",

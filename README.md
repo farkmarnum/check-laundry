@@ -14,7 +14,7 @@ Sensors -> Raspberry Pi -> LTE modem -> Twilio SIM -> Backend
 Basic Python script that uses the `sounddevice` library to process audio input, compute loudness, and periodically update the backend with data.
 
 ## Setup
-To install, add the code in the `device` folder into `/opt/laundry` or somewhere else sensible. Then run this for setup:
+To install, add the code in the `device` folder into `/opt/check-laundry` or somewhere else sensible. Then run this for setup:
 ```bash
 # Add necessary system packages
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 Next, you'll want to set up the Pi so that the process runs at startup. Add this to `/etc/rc.local`, right before the `exit 0` line:
 ```bash
-/opt/laundry/run.sh >> /home/pi/laundry.log &
+bash -c 'sleep 15 && /opt/check-laundry/run.sh' 2>&1 | tee /home/pi/laundry.log &
 ```
 
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
