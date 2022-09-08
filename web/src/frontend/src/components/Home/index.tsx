@@ -19,10 +19,15 @@ const Stations = ({ data }: { data: Record<string, string> }) => (
   <>
     {Object.entries(data).map(([id, status]) => (
       <div className={s.unit} key={id}>
-        <img src={washer} alt="washer" />
+        <div style="font-weight: bold">{id}</div>
+        <img
+          src={washer}
+          alt="washer"
+          className={status === 'on' ? s.inUse : ''}
+        />
         {status === 'off' && 'free ✅'}
         {status === 'on' && 'in use ❌'}
-        {status === 'data_missing' && 'unknown 🤷'}
+        {status === 'data_missing' && 'no data 🤷'}
       </div>
     ))}
   </>

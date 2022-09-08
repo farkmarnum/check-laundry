@@ -2,7 +2,10 @@
   display: flex;
   justify-content: space-evenly;
 
-  margin-top: 60px;
+  max-width: 800px;
+  margin: 60px auto 0;
+
+  font-size: 24px;
 }
 
 .unit {
@@ -11,7 +14,30 @@
 
 .unit img {
   width: 120px;
-  filter: invert(100%);
+  filter: invert(100%); /* black -> white */
   display: block;
-  margin-bottom: 10px;
+  margin: 12px 0 16px;
+}
+
+@keyframes vibrate {
+  0%, 10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90% {
+    -webkit-transform: translate3d(-1px, 0, 0);
+            transform: translate3d(-1px, 0, 0);
+  }
+  5%, 15%, 25%, 35%, 45%, 55%, 65%, 75%, 85%, 95% {
+    -webkit-transform: translate3d(1px, 0, 0);
+            transform: translate3d(1px, 0, 0);
+  }
+}
+
+.inUse {
+  animation: vibrate 1.5s linear infinite;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@media (min-width: 576px) {
+  .unit img {
+    width: 160px;
+  }
 }
