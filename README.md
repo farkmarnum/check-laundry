@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 Next, you'll want to set up the Pi so that the process runs at startup. Add this to `/etc/rc.local`, right before the `exit 0` line:
 ```bash
-bash -c 'sleep 15 && /opt/check-laundry/run.sh' 2>&1 | tee /home/pi/laundry.log &
+bash -c 'sleep 15 && cd /opt/check-laundry && run.sh' 2>&1 | tee /home/pi/laundry.log &
 ```
 
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
@@ -50,7 +50,7 @@ sudo reboot
 ## Deploying changes to the Pi
 ```bash
 export PI_IP=192.168.1.120 # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
-scp -r ./. pi@:/opt/check-laundry
+scp -r ./. pi@$PI_IP:/opt/check-laundry
 ```
 
 
