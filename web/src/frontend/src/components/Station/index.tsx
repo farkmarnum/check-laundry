@@ -1,6 +1,23 @@
 import { useEffect, useState } from 'preact/hooks';
+import Spinner from '../Spinner';
 
-import './style.css';
+import s from './style.css';
+
+const capitalizeWords = (str: string) =>
+  str
+    .toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+
+const Loading = () => (
+  <div>
+    <div>Loading laundry data...</div>
+    <div style="margin-top: -6px">
+      <Spinner />
+    </div>
+  </div>
+);
 
 const Station = ({ stationId }: { stationId: string }) => {
   const [stationData, setStationData] = useState();
@@ -18,16 +35,18 @@ const Station = ({ stationId }: { stationId: string }) => {
     })();
   }, [stationId]);
 
-  const stationName = stationId.replace(/_/g, ' ');
+  const stationName = capitalizeWords(stationId.replace(/_/g, ' '));
 
   useEffect(() => {
     document.title = `Check Laundry - ${stationName}`;
   }, [stationName]);
 
   return (
-    <div className="title">
+    <div>
       <h1>{stationName}</h1>
-      <div className="units">{JSON.stringify(stationData)}</div>
+      <div className={s.units}>
+        {stationData ? JSON.stringify(stationData) : <Loading />}
+      </div>
     </div>
   );
 };
