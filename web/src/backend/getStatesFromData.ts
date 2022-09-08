@@ -1,4 +1,4 @@
-const FIVE_MINUTES = 5 * 60 * 1000;
+const RECENT_TIMESPAN = 3 * 60 * 1000; // 3 minutes
 const THRESHOLD = 20;
 
 export const getStatesFromData = (data: Record<string, [number, number][]>) => {
@@ -6,17 +6,17 @@ export const getStatesFromData = (data: Record<string, [number, number][]>) => {
 
   const states = Object.fromEntries(
     Object.entries(data).map(([unitId, unitData]) => {
-      const lastFiveMinutes = unitData.filter(
-        ([timestamp]) => timestamp > now - FIVE_MINUTES,
+      const recentData = unitData.filter(
+        ([timestamp]) => timestamp > now - RECENT_TIMESPAN,
       );
 
-      if (lastFiveMinutes.length === 0) {
+      if (recentData.length === 0) {
         return [unitId, 'data_missing'];
       }
 
       const avgLoudness =
-        lastFiveMinutes.reduce((acc, [, loudness]) => acc + loudness, 0) /
-        lastFiveMinutes.length;
+        recentData.reduce((acc, [, loudness]) => acc + loudness, 0) /
+        recentData.length;
 
       return [unitId, avgLoudness > THRESHOLD ? 'on' : 'off'];
     }),
