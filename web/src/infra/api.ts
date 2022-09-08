@@ -17,7 +17,7 @@ api.get(`/api/v1/stationData/{stationId}`, getStationDataHandler);
 api.post(`/api/v1/stationData/{stationId}`, updateStationDataHandler);
 
 // Static frontend:
-const frontendDir = path.join(__dirname, '../frontend/');
+const frontendDir = path.join(__dirname, '../frontend/build');
 api.static('/', frontendDir);
 
 // Domain mapping:

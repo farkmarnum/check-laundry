@@ -1,0 +1,16 @@
+{
+  "name": "Check Laundry",
+  "short_name": "Check Laundry",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0077B6",
+  "theme_color": "#03045e",
+  "icons": [
+    {
+      "src": "/assets/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
