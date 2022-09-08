@@ -19,7 +19,7 @@ const Stations = ({ data }: { data: Record<string, string> }) => (
   <>
     {Object.entries(data).map(([id, status]) => (
       <div className={s.unit} key={id}>
-        <div style="font-weight: bold">{id}</div>
+        <div style="font-weight: bold">{parseInt(id, 10) + 1}</div>
         <img
           src={washer}
           alt="washer"
