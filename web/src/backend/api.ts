@@ -42,7 +42,7 @@ export const getStationDataHandler: RouteHandler = async (req, res) => {
 
   try {
     const data = await getStationData({ stationId });
-    res.json(data);
+    res.json({ data });
   } catch (err) {
     console.error(err);
 

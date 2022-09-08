@@ -1,12 +1,10 @@
 import json
 from urllib.request import urlopen, Request
-
 from config import API_KEY, API_URL, STATION_ID, MIN_BUFFER_LENGTH
-
 
 def notify(unit_data):
     headers = { 'api-key': API_KEY, 'Content-Type': 'application/json' }
-    data = json.dumps({ 'data': unit_data })
+    data = json.dumps({ 'data': unit_data }).encode('utf-8')
 
     request = Request(f'{API_URL}/{STATION_ID}', headers=headers, data=data)
 
