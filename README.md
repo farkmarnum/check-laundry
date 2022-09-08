@@ -47,6 +47,13 @@ Then, you can reboot the Pi to start the script:
 sudo reboot
 ```
 
+## Deploying changes to the Pi
+```bash
+PI_IP=192.168.1.120 # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
+scp -r ./. pi@:/opt/check-laundry
+```
+
+
 # Backend
 Pulumi API (AWS API Gateway + AWS Lambda) -> Pulumi Bucket (AWS S3)
 
