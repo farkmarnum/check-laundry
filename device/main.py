@@ -8,6 +8,7 @@ from process import process
 
 def loop():
     buffers, streams = setup()
+    states = {}
 
     with contextlib.ExitStack() as stack:
         for mgr in streams.values():
@@ -15,7 +16,7 @@ def loop():
 
         while True:
             sd.sleep(MONITOR_PERIOD * 1000)
-            process(buffers)
+            states = process(states, buffers)
 
 if __name__ == '__main__':
     # If the script crashes, take a short break and start over:
