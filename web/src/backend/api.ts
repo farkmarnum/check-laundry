@@ -2,7 +2,6 @@ import { RouteHandler } from '@pulumi/cloud';
 
 import { updateStationData, getStationData } from './s3';
 import { API_KEY } from '../infra/config';
-import { getStatesFromData } from './getStatesFromData';
 
 // NOTE: we don't want to send any response besides a status code, since we want to save bandwidth (IoT LTE)
 export const updateStationDataHandler: RouteHandler = async (req, res) => {
@@ -46,8 +45,7 @@ export const getStationDataHandler: RouteHandler = async (req, res) => {
 
   try {
     const data = await getStationData({ stationId });
-    const unitStates = getStatesFromData(data);
-    res.json({ unitStates });
+    res.json({ data });
   } catch (err) {
     console.error(err);
 

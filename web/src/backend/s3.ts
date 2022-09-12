@@ -1,7 +1,5 @@
 import { bucket } from '../infra/bucket';
 
-const TIME_CHUNK = 1000 * 60 * 60 * 2; // 2 hours (ms)
-
 /**
  * DATA STRUCTURE FOR S3
  *
@@ -10,21 +8,20 @@ const TIME_CHUNK = 1000 * 60 * 60 * 2; // 2 hours (ms)
  * Each laundry station is a Key
  *
  * The data in the object is in this form: {
- *   unitId: Array<[timestamp, loudnessLevel]>,
+ *   unitId: Array<{timestamp: number, state: 'on' | 'off' | 'unknown'}>,
  * }
  */
 
-type StationData = Record<string, [number, number][]>;
+type StationDataSingle = Record<string, { state: string; timestamp: number }>;
+type StationData = Record<string, { state: string; timestamp: number }[]>;
 
 export const updateStationData = async ({
   stationId,
   data,
 }: {
   stationId: string;
-  data: Record<string, number>;
+  data: StationDataSingle;
 }) => {
-  const timestamp = +new Date();
-
   let stationData: StationData;
   try {
     const blob = await bucket.get(stationId);
@@ -37,15 +34,13 @@ export const updateStationData = async ({
     }
   }
 
-  Object.entries(data as Record<string, number>).forEach(
-    ([unitId, loudnessLevel]) => {
-      if (!stationData[unitId]) {
-        stationData[unitId] = [];
-      }
+  Object.entries(data).forEach(([unitId, { state, timestamp }]) => {
+    if (!stationData[unitId]) {
+      stationData[unitId] = [];
+    }
 
-      stationData[unitId].push([timestamp, loudnessLevel]);
-    },
-  );
+    stationData[unitId].push({ state, timestamp });
+  });
 
   await bucket.put(stationId, Buffer.from(JSON.stringify(stationData)));
 };
@@ -63,16 +58,14 @@ export const getStationData = async ({ stationId }: { stationId: string }) => {
     }
   }
 
-  const timeThreshold = +new Date() - TIME_CHUNK;
+  const currentData: StationDataSingle = {};
 
-  const recentStationData = Object.fromEntries(
-    Object.entries(stationData).map(([unitId, unitData]) => {
-      const recentData = unitData.filter(
-        ([timestamp]) => timestamp > timeThreshold,
-      );
-      return [unitId, recentData];
-    }),
-  );
+  Object.entries(stationData).forEach(([unitId, unitData]) => {
+    const lastDataPoint = unitData.slice(-1)[0];
+    const { state, timestamp } = lastDataPoint;
 
-  return recentStationData;
+    currentData[unitId] = { state, timestamp };
+  });
+
+  return currentData;
 };

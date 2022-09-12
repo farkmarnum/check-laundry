@@ -4,6 +4,8 @@ import washer from '../../assets/washer.svg';
 
 import s from './style.css';
 
+const MAX_WASHER_TIME = 1000 * 60 * 60 * 2; // 2 hrs (ms)
+
 const STATION_ID = 'basement'; // For now, just one station.
 
 const Loading = () => (
@@ -13,26 +15,43 @@ const Loading = () => (
   </div>
 );
 
-const Stations = ({ data }: { data: Record<string, string> }) => (
+const Stations = ({
+  data,
+}: {
+  data: Record<string, { state: string; timestamp: number }>;
+}) => (
   <>
-    {Object.entries(data).map(([id, status]) => (
-      <div className={s.unit} key={id}>
-        <div style="font-weight: bold">{parseInt(id, 10) + 1}</div>
-        <img
-          src={washer}
-          alt="washer"
-          className={status === 'on' ? s.inUse : ''}
-        />
-        {status === 'off' && 'free ✅'}
-        {status === 'on' && 'in use ❌'}
-        {status === 'data_missing' && 'no data 🤷'}
-      </div>
-    ))}
+    {Object.entries(data).map(([id, { state, timestamp }]) => {
+      let status = state;
+
+      const timeSinceLastEvent = +new Date() - timestamp;
+      if (timeSinceLastEvent > MAX_WASHER_TIME && status === 'on') {
+        console.warn(
+          `Something's gone wrong! Status is 'on' but timestamp is too old (ts = ${timestamp}, now = ${+new Date()}`,
+        );
+        status = 'unknown';
+      }
+
+      return (
+        <div className={s.unit} key={id}>
+          <div style="font-weight: bold">{parseInt(id, 10) + 1}</div>
+          <img
+            src={washer}
+            alt="washer"
+            className={state === 'on' ? s.inUse : ''}
+          />
+          {state === 'off' && 'free ✅'}
+          {state === 'on' && 'in use ❌'}
+          {state !== 'off' && state !== 'on' && 'no data 🤷'}
+        </div>
+      );
+    })}
   </>
 );
 
 const Home = () => {
-  const [stationData, setStationData] = useState<Record<string, string>>();
+  const [stationData, setStationData] =
+    useState<Record<string, { state: string; timestamp: number }>>();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -42,9 +61,9 @@ const Home = () => {
           `https://checklaundry.com/api/v1/stationData/${STATION_ID}`,
         );
 
-        const { unitStates } = (await resp.json()) || {};
-        if (unitStates) {
-          setStationData(unitStates);
+        const { data } = (await resp.json()) || {};
+        if (data) {
+          setStationData(data);
         }
       } catch (err) {
         console.error(err);
