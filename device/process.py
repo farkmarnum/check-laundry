@@ -24,7 +24,7 @@ def notify(data):
 _states = {}
 
 def process(buffers):
-    now = time.time()
+    now = int(time.time() * 1000)
 
     new_data = {}
 
