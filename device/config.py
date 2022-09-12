@@ -12,7 +12,7 @@ MIN_BUFFER_LENGTH = 30 # wait to send data until we have at least 30 seconds of 
 
 MAX_TIME_BETWEEN_UPDATES_MS = 60 * 118 * 1000 # Make sure we send updates at least every 2 hrs (minus a few mins for buffer)
 
-LOUDNESS_THRESHOLD = 10 
+LOUDNESS_THRESHOLD = 10
 
 API_KEY = os.environ['API_KEY']
 API_URL = os.environ['API_URL']
