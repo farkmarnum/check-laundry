@@ -1,2 +1,4 @@
 *.js
 **/*.js
+src/frontend/*.js
+src/frontend/**/*.js

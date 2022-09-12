@@ -6,8 +6,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "lint": "eslint src",
-    "tc": "tsc --noEmit",
+    "lint:this": "eslint src",
+    "lint:frontend": "cd src/frontend && yarn lint",
+    "lint": "yarn lint:this && yarn lint:frontend",
+    "tc:this": "tsc --noEmit",
+    "tc:frontend": "cd src/frontend && yarn tc",
+    "tc": "yarn tc:this && yarn tc:frontend",
     "build": "cd src/frontend && yarn build",
     "pulumi-up": "pulumi refresh -y --non-interactive && pulumi up -y",
     "deploy": "yarn build && yarn pulumi-up"
@@ -22,7 +26,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3"
   },
   "dependencies": {
     "@pulumi/aws": "^5.0.0",
