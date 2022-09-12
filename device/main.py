@@ -1,3 +1,4 @@
+import time
 import contextlib
 import sounddevice as sd
 
@@ -17,4 +18,11 @@ def loop():
             process(buffers)
 
 if __name__ == '__main__':
-    loop()
+    # If the script crashes, take a short break and start over:
+    while True:
+        try:
+            loop()
+        except Exception as e:
+            print(e)
+            print("Restarting in 5...")
+            time.sleep(5)
