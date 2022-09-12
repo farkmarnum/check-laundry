@@ -13,6 +13,7 @@ env:
 jobs:
   deploy:
     name: Deploy infrastructure
+    concurrency: laundry-deploy-prod # Only run one of this job at a time
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
