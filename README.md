@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 Next, you'll want to set up the Pi so that the process runs at startup. Add this to `/etc/rc.local`, right before the `exit 0` line:
 ```bash
-bash -c 'sleep 15 && cd /opt/check-laundry && run.sh' 2>&1 | tee /home/pi/laundry.log &
+bash -c 'cd /opt/check-laundry && run.sh' 2>&1 | tee /home/pi/laundry.log &
 ```
 
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
@@ -42,6 +42,10 @@ API_URL=https://<your domain>/stationData
 STATION_ID=<the laundry station ID, your choice>
 ```
 
+You'll also want to configure the Pi to wait for network on boot. You can do this by running `sudo raspi-config` and then "System Options" > "Network at Boot."
+
+And, you'll need to set up your Pi to work with LET modem. Here's a [helpful guide](https://www.twilio.com/docs/iot/supersim/getting-started-super-sim-raspberry-pi-sixfab-cellular-iot-hat).
+
 Then, you can reboot the Pi to start the script:
 ```bash
 sudo reboot
@@ -50,12 +54,13 @@ sudo reboot
 ## Deploying changes to the Pi
 ```bash
 export PI_IP=<the IP of your PI> # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
-rsync -r --delete --exclude=.git --exclude=.venv --exclude=__pycache__ --exclude=.DS_Store ./ pi@$PI_IP:/opt/check-laundry
+rsync -r --exclude=.git --exclude=.venv --exclude=__pycache__ --exclude=.DS_Store ./ pi@$PI_IP:/opt/check-laundry
 ```
 Then reboot.
 
 Or you could just remove the SD card and load the code onto it that way.
 
+NOTE: if you change anything in `requirements.txt`, you'll need to repeat the "Install Python packages" step from above.
 
 # Backend
 Pulumi API (AWS API Gateway + AWS Lambda) -> Pulumi Bucket (AWS S3)
