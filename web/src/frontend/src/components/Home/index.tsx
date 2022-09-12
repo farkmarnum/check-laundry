@@ -54,22 +54,32 @@ const Home = () => {
     useState<Record<string, { state: string; timestamp: number }>>();
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const resp = await fetch(
-          `https://checklaundry.com/stationData/${STATION_ID}`,
-        );
+  const fetchData = async () => {
+    try {
+      const resp = await fetch(
+        `https://checklaundry.com/stationData/${STATION_ID}`,
+      );
 
-        const { data } = (await resp.json()) || {};
-        if (data) {
-          setStationData(data);
-        }
-      } catch (err) {
-        console.error(err);
-        setError('Failed to fetch data! 😕');
+      const { data } = (await resp.json()) || {};
+      if (data) {
+        setStationData(data);
       }
-    })();
+    } catch (err) {
+      console.error(err);
+      setError('Failed to fetch data! 😕');
+    }
+  };
+
+  // Fetch on mount & set up interval:
+  useEffect(() => {
+    fetchData();
+
+    const interval = setInterval(fetchData, 1000 * 60);
+
+    // On unmount:
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
