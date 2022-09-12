@@ -14,7 +14,13 @@ Sensors -> Raspberry Pi -> LTE modem -> Twilio SIM -> Backend
 Basic Python script that uses the `sounddevice` library to process audio input, compute loudness, and periodically update the backend with data.
 
 ## Setup
-To install, add the code in the `device` folder into `/opt/check-laundry` or somewhere else sensible. Then run this for setup:
+You'll need to set up your Pi to work with your LTE modem. Here are some resources:
+- [Twilio](https://www.twilio.com/docs/iot/supersim/getting-started-super-sim-raspberry-pi-sixfab-cellular-iot-hat)
+- [Sixfab](https://docs.sixfab.com/page/cellular-internet-connection-in-ecm-mode)
+- [Telit](https://sixfab.com/wp-content/uploads/2022/05/Telit_Modules_Linux_USB_Drivers_User_Guide_r14.pdf)
+
+
+To install code to the Pi, add the code in the `device` folder into `/opt/check-laundry` or somewhere else sensible. Then run this for setup:
 ```bash
 # Add necessary system packages
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -30,9 +36,14 @@ python3 -m venv .venv
 pip install -r requirements.txt
 ```
 
-Next, you'll want to set up the Pi so that the process runs at startup. Add this to `/etc/rc.local`, right before the `exit 0` line:
+Next, you'll want to set up the Pi so that the process runs at startup. Also, we need to make sure the LTE modem gets set up on startup.
+Add this to `/etc/rc.local`, right before the `exit 0` line:
 ```bash
-bash -c 'cd /opt/check-laundry && run.sh' 2>&1 | tee /home/pi/laundry.log &
+# Connect to the internet via IoT LTE modem
+sudo atcom AT#ECM=1,0
+
+# Start check-laundry process:
+bash -c 'cd /opt/check-laundry && ./run.sh' 2>&1 | tee /home/pi/laundry.log &
 ```
 
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
@@ -42,9 +53,6 @@ API_URL=https://<your domain>/stationData
 STATION_ID=<the laundry station ID, your choice>
 ```
 
-You'll also want to configure the Pi to wait for network on boot. You can do this by running `sudo raspi-config` and then "System Options" > "Network at Boot."
-
-And, you'll need to set up your Pi to work with LET modem. Here's a [helpful guide](https://www.twilio.com/docs/iot/supersim/getting-started-super-sim-raspberry-pi-sixfab-cellular-iot-hat).
 
 Then, you can reboot the Pi to start the script:
 ```bash
