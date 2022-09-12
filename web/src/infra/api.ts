@@ -10,7 +10,7 @@ import { certificateArn } from './cert';
 
 const api = new cloud.API('laundry');
 
-const STATION_DATA_PATH = '/api/v1/stationData/{stationId}';
+export const STATION_DATA_PATH = '/stationData/{stationId}';
 
 // GET request for frontend to pull data:
 api.get(STATION_DATA_PATH, getStationDataHandler);

@@ -38,7 +38,7 @@ bash -c 'sleep 15 && cd /opt/check-laundry && run.sh' 2>&1 | tee /home/pi/laundr
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
 ```
 API_KEY=<your API key here>
-API_URL=https://<your domain>/api/v1/status
+API_URL=https://<your domain>/stationData
 STATION_ID=<the laundry station ID, your choice>
 ```
 

@@ -58,7 +58,7 @@ const Home = () => {
     (async () => {
       try {
         const resp = await fetch(
-          `https://checklaundry.com/api/v1/stationData/${STATION_ID}`,
+          `https://checklaundry.com/stationData/${STATION_ID}`,
         );
 
         const { data } = (await resp.json()) || {};
