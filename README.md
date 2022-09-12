@@ -75,11 +75,13 @@ The Pi will report the status whenever the state of a unit changes.
   - 16 events * 10KB * 30 days -> 4800KB -> 4.8 MB -> $0.50 per month on Twilio (Super SIM).
 
 The backend will store the data and determine the state.
-  - 43,200 lambda invocations = < $1 per month.
+  - 43,200 lambda invocations = ~$0.25 per month.
 
 We can use S3 as database.
-  - storage & transfer costs = < $1 per month.
+  - storage & transfer costs = ~ $0.05 per month.
 
-Total cost: $1-2 per month
+Twilio Super SIM charges $2/month per active SIM.
+
+Total cost: ~$3 per month
 
 🎉 🎉 🎉 
