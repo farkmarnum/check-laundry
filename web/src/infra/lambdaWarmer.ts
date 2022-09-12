@@ -5,15 +5,14 @@ import { DOMAIN } from './config';
 
 const STATION_FOR_WARMING = 'basement';
 
-/**
- * This calls the endpoint for station data once every 5 minutes to prevent Lambda cold starts
- */
-
 const eventRule = new aws.cloudwatch.EventRule(
   `laundry-lambdaforMainGet-warming-rule`,
   { scheduleExpression: 'rate(5 minutes)' },
 );
 
+/**
+ * This calls the endpoint for station data once every 5 minutes to prevent Lambda cold starts
+ */
 export const subscription = new aws.cloudwatch.EventRuleEventSubscription(
   `laundry-lambdaforMainGet-warming-subscription`,
   eventRule,
