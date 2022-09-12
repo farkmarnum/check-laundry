@@ -53,6 +53,8 @@ export PI_IP=192.168.1.120 # Connect via ethernet or WiFi, then you can use nmap
 scp -r ./. pi@$PI_IP:/opt/check-laundry
 ```
 
+Or you could just remove the SD card and load the code onto it that way.
+
 
 # Backend
 Pulumi API (AWS API Gateway + AWS Lambda) -> Pulumi Bucket (AWS S3)
@@ -65,9 +67,11 @@ Basic HTML + CSS + JS frontend, staticly hosted on S3 and served w/ the same API
 
 
 # Cost
-
-The Pi will report the status once per minute.
-  - ~0.25KB of data * 60 mins * 24 hrs * 30 days -> 10800KB -> 10.8 MB -> $1.08 per month on Twilio (Super SIM).
+The Pi will report the status whenever the state of a unit changes.
+  - This request + response is around 10 KB of data (mostly TCP handshake & headers)
+  - Assume each washer is used twice each day (so, 2 on events and 2 off events)
+  - In addition, we'll want to add a ping to tell the backend that the Pi is still running even if no state changes. We can do that every 2 hrs. (so, 12 events)
+  - 16 events * 10KB * 30 days -> 4800KB -> 4.8 MB -> $0.50 per month on Twilio (Super SIM).
 
 The backend will store the data and determine the state.
   - 43,200 lambda invocations = < $1 per month.
@@ -75,6 +79,6 @@ The backend will store the data and determine the state.
 We can use S3 as database.
   - storage & transfer costs = < $1 per month.
 
-Total cost: ~$2 per month (potentially more if data packets from the Pi are larger)
+Total cost: $1-2 per month
 
 🎉 🎉 🎉 
