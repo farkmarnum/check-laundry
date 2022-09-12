@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.7.15",
+    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "eslint": "^8.23.0",
@@ -36,6 +37,6 @@
     "@pulumi/cloud-aws": "^0.30.1",
     "@pulumi/pulumi": "^3.0.0",
     "aws-sdk": "^2.1210.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "2"
   }
 }
