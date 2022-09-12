@@ -17,6 +17,8 @@ export const subscription = new aws.cloudwatch.EventRuleEventSubscription(
   `laundry-lambdaforMainGet-warming-subscription`,
   eventRule,
   async () => {
+    const fetch = (await import('node-fetch')).default;
+
     const url = `https://${DOMAIN}/${STATION_DATA_PATH}`.replace(
       '{stationId}',
       STATION_FOR_WARMING,

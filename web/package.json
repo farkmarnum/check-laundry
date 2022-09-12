@@ -35,6 +35,7 @@
     "@pulumi/cloud": "^0.30.1",
     "@pulumi/cloud-aws": "^0.30.1",
     "@pulumi/pulumi": "^3.0.0",
-    "aws-sdk": "^2.1210.0"
+    "aws-sdk": "^2.1210.0",
+    "node-fetch": "^3.2.10"
   }
 }
