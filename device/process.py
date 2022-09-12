@@ -7,7 +7,7 @@ from config import (
     STATION_ID,
     MIN_BUFFER_LENGTH,
     LOUDNESS_THRESHOLD,
-    MAX_TIME_BETWEEN_UPDATES
+    MAX_TIME_BETWEEN_UPDATES_MS
 )
 
 # NOTE: unit_data is in the form { <unit_id>: <unit_state> }
@@ -40,8 +40,16 @@ def process(buffers):
         if (
             id not in _states or
             _states[id]['state'] != new_state
-            or _states[id]['timestamp'] - now > MAX_TIME_BETWEEN_UPDATES
+            or _states[id]['timestamp'] - now > MAX_TIME_BETWEEN_UPDATES_MS
         ):
+            # TODO: remove this debugging
+            if id not in _states:
+                print(f'{id} was not in {_states}')
+            elif _states[id]['state'] != new_state:
+                print(f"_states[id]['state'] = {_states[id]['state']}, new_state = {new_state}")
+            else:
+                print(f"_states[id]['timestamp'] = {_states[id]['timestamp']}, now = {now}, diff = {_states[id]['timestamp'] - now}, MAX_TIME_BETWEEN_UPDATES={MAX_TIME_BETWEEN_UPDATES_MS}")
+
             d = { 'state': average_loudness, 'timestamp': now }
             new_data[id] = d
             _states[id] = d

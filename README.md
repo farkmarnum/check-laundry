@@ -54,6 +54,7 @@ sudo reboot
 ## Deploying changes to the Pi
 ```bash
 export PI_IP=<the IP of your PI> # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
+cd device
 rsync -r --exclude=.git --exclude=.venv --exclude=__pycache__ --exclude=.DS_Store ./ pi@$PI_IP:/opt/check-laundry
 ```
 Then reboot.
