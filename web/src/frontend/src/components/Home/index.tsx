@@ -86,9 +86,9 @@ const Home = () => {
     <div>
       <h1>Check Laundry 🧺</h1>
       <div className={s.units}>
-        {stationData && <Stations data={stationData} />}
         {error && error}
-        {!stationData && !error && <Loading />}
+        {!error && stationData && <Stations data={stationData} />}
+        {!error && !stationData && <Loading />}
       </div>
     </div>
   );
