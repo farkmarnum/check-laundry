@@ -14,11 +14,11 @@
 
 .unit img {
   width: 120px;
-  filter: invert(100%); /* black -> white */
   display: block;
   margin: 12px 0 16px;
 }
 
+/* wiggle! */
 @keyframes vibrate {
   0%, 10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90% {
     -webkit-transform: translate3d(-1px, 0, 0);

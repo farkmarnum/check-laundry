@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import Spinner from '../Spinner';
-import washer from '../../assets/washer.png';
+import washer from '../../assets/washer.svg';
 
 import s from './style.css';
 
@@ -9,9 +9,7 @@ const STATION_ID = 'basement'; // For now, just one station.
 const Loading = () => (
   <div>
     <div>Loading laundry data...</div>
-    <div style="margin-top: -6px">
-      <Spinner />
-    </div>
+    <Spinner />
   </div>
 );
 
