@@ -50,7 +50,7 @@ def process(buffers):
             else:
                 print(f"_states[id]['timestamp'] = {_states[id]['timestamp']}, now = {now}, diff = {_states[id]['timestamp'] - now}, MAX_TIME_BETWEEN_UPDATES={MAX_TIME_BETWEEN_UPDATES_MS}")
 
-            d = { 'state': average_loudness, 'timestamp': now }
+            d = { 'state': new_state, 'timestamp': now }
             new_data[id] = d
             _states[id] = d
 
