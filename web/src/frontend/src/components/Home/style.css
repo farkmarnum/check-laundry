@@ -18,20 +18,17 @@
   margin: 12px 0 16px;
 }
 
-/* wiggle! */
-@keyframes vibrate {
-  0%, 10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90% {
-    -webkit-transform: translate3d(-1px, 0, 0);
-            transform: translate3d(-1px, 0, 0);
+@keyframes wiggle {
+  0%, 100% {
+    transform: translateX(3px) rotate(2deg);
   }
-  5%, 15%, 25%, 35%, 45%, 55%, 65%, 75%, 85%, 95% {
-    -webkit-transform: translate3d(1px, 0, 0);
-            transform: translate3d(1px, 0, 0);
+  50% {
+    transform: translateX(-3px) rotate(-2deg);
   }
 }
 
 .inUse {
-  animation: vibrate 1.5s linear infinite;
+  animation: wiggle 0.25s linear infinite;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
