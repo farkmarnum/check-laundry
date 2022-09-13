@@ -8,19 +8,23 @@ https://checklaundry.com
 # Device
 
 ## Hardware
-Sensors -> Raspberry Pi -> LTE modem -> Twilio SIM -> Backend
+Sensors -> Raspberry Pi Zero W -> Sixfab 3G-4G/LTE Base Hat -> Tellit ME910C1-WW modem -> Twilio Super SIM -> Backend API
 
 ## Software
 Basic Python script that uses the `sounddevice` library to process audio input, compute loudness, and periodically update the backend with data.
 
 ## Setup
 You'll need to set up your Pi to work with your LTE modem. Here are some resources:
-- [Twilio](https://www.twilio.com/docs/iot/supersim/getting-started-super-sim-raspberry-pi-sixfab-cellular-iot-hat)
-- [Sixfab](https://docs.sixfab.com/page/cellular-internet-connection-in-ecm-mode)
-- [Telit](https://sixfab.com/wp-content/uploads/2022/05/Telit_Modules_Linux_USB_Drivers_User_Guide_r14.pdf)
+- [Twilio](https://www.twilio.com/docs/iot/supersim/getting-started-super-sim-raspberry-pi-sixfab-base-hat)
 
+Copy the source code in the `device` folder into `/opt/check-laundry` on the Pi or somewhere else sensible:
+```bash
+export PI_IP=<the IP of your PI> # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
+cd device
+rsync -r --exclude=.git --exclude=.venv --exclude=__pycache__ --exclude=.DS_Store ./ pi@$PI_IP:/opt/check-laundry
+```
 
-To install code to the Pi, add the code in the `device` folder into `/opt/check-laundry` or somewhere else sensible. Then run this for setup:
+Setup:
 ```bash
 # Add necessary system packages
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -39,11 +43,8 @@ pip install -r requirements.txt
 Next, you'll want to set up the Pi so that the process runs at startup. Also, we need to make sure the LTE modem gets set up on startup.
 Add this to `/etc/rc.local`, right before the `exit 0` line:
 ```bash
-# Connect to the internet via IoT LTE modem
-sudo atcom AT#ECM=1,0
-
 # Start check-laundry process:
-bash -c 'cd /opt/check-laundry && ./run.sh' 2>&1 | tee /home/pi/laundry.log &
+bash -c 'sleep 30 && cd /opt/check-laundry && ./run.sh' 2>&1 | tee /home/pi/laundry.log &
 ```
 
 Lastly, you'll need to add an `.env` file for config. Add this to an `.env` file in the same directory as `run.sh`:
@@ -59,26 +60,15 @@ Then, you can reboot the Pi to start the script:
 sudo reboot
 ```
 
-## Deploying changes to the Pi
-```bash
-export PI_IP=<the IP of your PI> # Connect via ethernet or WiFi, then you can use nmap and/or arp-scan to find the IP
-cd device
-rsync -r --exclude=.git --exclude=.venv --exclude=__pycache__ --exclude=.DS_Store ./ pi@$PI_IP:/opt/check-laundry
-```
-Then reboot.
-
-Or you could just remove the SD card and load the code onto it that way.
-
-NOTE: if you change anything in `requirements.txt`, you'll need to repeat the "Install Python packages" step from above.
 
 # Backend
 Pulumi API (AWS API Gateway + AWS Lambda) -> Pulumi Bucket (AWS S3)
 
-Using S3 for storage instead of a DB since it's so cheap & our needs are minimal.
+We're using S3 for storage instead of a database since it's so cheap & our needs are minimal.
 
 
 # Frontend
-Basic HTML + CSS + JS frontend, staticly hosted on S3 and served w/ the same API from the backend.
+Preact frontend, hosted on S3 and served w/ the same API used for the backend.
 
 
 # Cost
