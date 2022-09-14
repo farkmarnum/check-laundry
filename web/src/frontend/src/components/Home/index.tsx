@@ -67,6 +67,9 @@ const Home = () => {
     } catch (err) {
       console.error(err);
       setError('Failed to fetch data! 😕');
+
+      // Retry in 5 seconds:
+      setTimeout(fetchData, 1000 * 5);
     }
   };
 
@@ -74,7 +77,8 @@ const Home = () => {
   useEffect(() => {
     fetchData();
 
-    const interval = setInterval(fetchData, 1000 * 60);
+    // Fetch every 30 seconds
+    const interval = setInterval(fetchData, 1000 * 30);
 
     // On unmount:
     return () => {
