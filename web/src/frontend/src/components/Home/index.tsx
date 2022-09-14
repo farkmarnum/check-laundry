@@ -25,9 +25,9 @@ const Stations = ({
       let status = state;
 
       const timeSinceLastEvent = +new Date() - timestamp;
-      if (timeSinceLastEvent > MAX_WASHER_TIME && status === 'on') {
+      if (timeSinceLastEvent > MAX_WASHER_TIME) {
         console.warn(
-          `Something's gone wrong! Status is 'on' but timestamp is too old (ts = ${timestamp}, now = ${+new Date()}`,
+          `Something's gone wrong! Timestamp is too old (ts = ${timestamp}, now = ${+new Date()}, status = ${status})`,
         );
         status = 'unknown';
       }
@@ -38,11 +38,11 @@ const Stations = ({
           <img
             src={washer}
             alt="washer"
-            className={state === 'on' ? s.inUse : ''}
+            className={status === 'on' ? s.inUse : ''}
           />
-          {state === 'off' && 'free ✅'}
-          {state === 'on' && 'in use ❌'}
-          {state !== 'off' && state !== 'on' && 'no data 🤷'}
+          {status === 'off' && 'free ✅'}
+          {status === 'on' && 'in use ❌'}
+          {status !== 'off' && state !== 'on' && 'no data 🤷'}
         </div>
       );
     })}
