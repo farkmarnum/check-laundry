@@ -8,6 +8,8 @@ const MAX_WASHER_TIME = 1000 * 60 * 60 * 2; // 2 hrs (ms)
 
 const STATION_ID = 'basement'; // For now, just one station.
 
+const DEMO = true;
+
 const Loading = () => (
   <div>
     <div>Loading laundry data...</div>
@@ -55,6 +57,27 @@ const Home = () => {
   const [error, setError] = useState('');
 
   const fetchData = async () => {
+    if (DEMO) {
+      const timestamp = +new Date() + 1000 * 60 * 15 * 4;
+
+      // Change state every 15 mins:
+      const states = {
+        0: ['on', 'on'],
+        1: ['on', 'off'],
+        2: ['off', 'off'],
+        3: ['off', 'on'],
+      };
+      const parity = (Math.floor(timestamp / 1000 / 60 / 15) %
+        4) as keyof typeof states;
+      console.log(parity);
+
+      setStationData({
+        '0': { state: states[parity][0], timestamp },
+        '1': { state: states[parity][1], timestamp },
+      });
+      return;
+    }
+
     try {
       const resp = await fetch(
         `https://checklaundry.com/stationData/${STATION_ID}`,
