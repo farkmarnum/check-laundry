@@ -2,8 +2,6 @@
 
 A simple service so I don't have to walk down 2 flights of stairs to see if the washing machines are available.
 
-https://checklaundry.com
-
 
 # Device
 
